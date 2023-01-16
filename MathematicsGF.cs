@@ -2,6 +2,18 @@
 {
     public static class MathematicsGF
     {
+        public static string ConvertToString2(ulong num)
+        {
+            string result = String.Empty;
+            while (num != 0)
+            {
+                ulong nextDigit = num & 0x01;
+                result = nextDigit + result;
+                num >>= 1;
+            }
+            return result;
+        }
+
         /// <summary>
         /// Деление полинома на полином в поле Галуа принимает два полинома в десятичном виде
         /// </summary>
@@ -41,13 +53,6 @@
                 }
             }
         }
-
-        /// <summary>
-        /// Деление полинома на полином в поле Галуа принимает два полинома в десятичном виде
-        /// </summary>
-        /// <param name="divisible"> полином-делимое </param>
-        /// <param name="divisor"> полином-делитель </param>
-        /// <returns>string{целое, остаток}</returns>
         public static long[] DivOfPolyGF(long divisible, long divisor)
         {
             if (Convert.ToString(divisible, 2).Length < Convert.ToString(divisor, 2).Length) { return new long[2] { 0, divisible }; }
@@ -81,6 +86,39 @@
                 }
             }
         }
+        public static ulong[] DivOfPolyGF(ulong divisible, ulong divisor)
+        {
+            if (ConvertToString2(divisible).Length < ConvertToString2(divisor).Length) { return new ulong[2] { 0, divisible }; }
+            if (divisor == 0) { throw new Exception("Деление на 0"); }
+            if (divisor == 1) { return new ulong[2] { divisible, 0 }; }
+            string strDivisible = ConvertToString2(divisible);
+            string strDivisor = ConvertToString2(divisor);
+
+            string quotient = string.Empty;
+            string remainder = strDivisible.Substring(0, strDivisor.Length);
+
+            int counter = strDivisor.Length;
+            int divisibleLenght = strDivisible.Length;
+
+            while (true)
+            {
+                remainder = Convert.ToString((long)(Convert.ToUInt64(remainder, 2) ^ Convert.ToUInt64(strDivisor, 2)), 2);
+                quotient += "1";
+                while (remainder.Length != strDivisor.Length)
+                {
+                    if (counter < divisibleLenght)
+                    {
+                        remainder += strDivisible[counter]; counter++;
+                        remainder = Convert.ToString((long)Convert.ToUInt64(remainder, 2), 2);
+                        if (remainder.Length != strDivisor.Length) { quotient += "0"; }
+                    }
+                    else
+                    {
+                        return new ulong[2] { (ulong)Convert.ToUInt64(quotient, 2), (ulong)Convert.ToUInt64(remainder, 2) };
+                    }
+                }
+            }
+        }
 
         /// <summary>
         /// Умножение полиномов в поле Галуа
@@ -103,18 +141,22 @@
             }
             return DivOfPolyGF(result, modPoly)[1];
         }
-
-        /// <summary>
-        /// Умножение полиномов в поле Галуа
-        /// </summary>
-        /// <param name="poly1"></param>
-        /// <param name="poly2"></param>
-        /// <param name="modPoly"> неприводимый полином</param>
-        /// <returns>long[1] = полином-произведение, long[0] = целое от деления на modPoly</returns>
         public static long MultOfPolyGF(long poly1, long poly2, long modPoly)
         {
             long result = 0;
             if (poly1 < poly2) { long cup = poly1; poly1 = poly2; poly2 = cup; }
+
+            while (poly2 != 0)
+            {
+                if ((poly2 & 0x01) == 1) { result ^= poly1; }
+                poly1 <<= 1; poly2 >>= 1;
+            }
+            return DivOfPolyGF(result, modPoly)[1];
+        }
+        public static ulong MultOfPolyGF(ulong poly1, ulong poly2, ulong modPoly)
+        {
+            ulong result = 0;
+            if (poly1 < poly2) { ulong cup = poly1; poly1 = poly2; poly2 = cup; }
 
             while (poly2 != 0)
             {
@@ -170,13 +212,6 @@
                 if (remainder == 1 || remainder == 0) { return remainderB; }
             }
         }
-
-        /// <summary>
-        /// Нахождение инверсного сомножителя в поле Галуа
-        /// </summary>
-        /// <param name="poly"></param>
-        /// <param name="modPoly">неприводимый полином</param>
-        /// <returns>мульти-инверсия полинома</returns>
         public static long InversionPolynomialGF(long poly, long modPoly)
         {
             if (poly == 0) { return 0; }
@@ -211,6 +246,46 @@
                 }
 
                 long cup = remainderB;
+                remainderB = remainderD ^ MultOfPolyGF(quotient, remainderB, modPoly);
+                remainderD = cup;
+
+                if (remainder == 1 || remainder == 0) { return remainderB; }
+            }
+        }
+        public static ulong InversionPolynomialGF(ulong poly, ulong modPoly)
+        {
+            if (poly == 0) { return 0; }
+            if (poly == 1) { return 1; }
+            ulong divisible = modPoly;
+            ulong divisor = poly;
+            ulong remainderD = 0;
+            ulong remainderB = 0;
+            ulong counter = 0;
+
+            while (true)
+            {
+                counter++;
+                ulong[] arr = DivOfPolyGF(divisible, divisor);
+                ulong quotient = arr[0];
+                ulong remainder = arr[1];
+
+                divisible = divisor;
+                divisor = remainder;
+
+                if (counter == 1)
+                {
+                    remainderD = quotient;
+                    if (remainder == 1) { return remainderD; }
+                    continue;
+                }
+                if (counter == 2)
+                {
+                    remainderB = 1 ^ MultOfPolyGF(remainderD, quotient, modPoly);
+                    if (remainder == 1) { return remainderB; }
+                    continue;
+                }
+
+                ulong cup = remainderB;
                 remainderB = remainderD ^ MultOfPolyGF(quotient, remainderB, modPoly);
                 remainderD = cup;
 
