@@ -22,9 +22,18 @@
         /// <returns>string{целое, остаток}</returns>
         public static int[] DivOfPolyGF(int divisible, int divisor)
         {
-            if (Convert.ToString(divisible, 2).Length < Convert.ToString(divisor, 2).Length) { return new int[2] { 0, divisible }; }
-            if (divisor == 0) { throw new Exception("Деление на 0"); }
-            if (divisor == 1) { return new int[2] { divisible, 0 }; }
+            if (Convert.ToString(divisible, 2).Length < Convert.ToString(divisor, 2).Length)
+            {
+                return new int[2] { 0, divisible };
+            }
+            if (divisor == 0)
+            {
+                throw new Exception("Деление на 0");
+            }
+            if (divisor == 1)
+            {
+                return new int[2] { divisible, 0 };
+            }
             string strDivisible = Convert.ToString(divisible, 2);
             string strDivisor = Convert.ToString(divisor, 2);
 
@@ -42,22 +51,39 @@
                 {
                     if (counter < divisibleLenght)
                     {
-                        remainder += strDivisible[counter]; counter++;
+                        remainder += strDivisible[counter];
+                        counter++;
                         remainder = Convert.ToString(Convert.ToInt32(remainder, 2), 2);
-                        if (remainder.Length != strDivisor.Length) { quotient += "0"; }
+                        if (remainder.Length != strDivisor.Length)
+                        {
+                            quotient += "0";
+                        }
                     }
                     else
                     {
-                        return new int[2] { Convert.ToInt32(quotient, 2), Convert.ToInt32(remainder, 2) };
+                        return new int[2]
+                        {
+                            Convert.ToInt32(quotient, 2),
+                            Convert.ToInt32(remainder, 2)
+                        };
                     }
                 }
             }
         }
         public static long[] DivOfPolyGF(long divisible, long divisor)
         {
-            if (Convert.ToString(divisible, 2).Length < Convert.ToString(divisor, 2).Length) { return new long[2] { 0, divisible }; }
-            if (divisor == 0) { throw new Exception("Деление на 0"); }
-            if (divisor == 1) { return new long[2] { divisible, 0 }; }
+            if (Convert.ToString(divisible, 2).Length < Convert.ToString(divisor, 2).Length)
+            {
+                return new long[2] { 0, divisible };
+            }
+            if (divisor == 0)
+            {
+                throw new Exception("Деление на 0");
+            }
+            if (divisor == 1)
+            {
+                return new long[2] { divisible, 0 };
+            }
             string strDivisible = Convert.ToString(divisible, 2);
             string strDivisor = Convert.ToString(divisor, 2);
 
@@ -75,22 +101,39 @@
                 {
                     if (counter < divisibleLenght)
                     {
-                        remainder += strDivisible[counter]; counter++;
+                        remainder += strDivisible[counter];
+                        counter++;
                         remainder = Convert.ToString((long)Convert.ToUInt64(remainder, 2), 2);
-                        if (remainder.Length != strDivisor.Length) { quotient += "0"; }
+                        if (remainder.Length != strDivisor.Length)
+                        {
+                            quotient += "0";
+                        }
                     }
                     else
                     {
-                        return new long[2] { (long)Convert.ToUInt64(quotient, 2), (long)Convert.ToUInt64(remainder, 2) };
+                        return new long[2]
+                        {
+                            (long)Convert.ToUInt64(quotient, 2),
+                            (long)Convert.ToUInt64(remainder, 2)
+                        };
                     }
                 }
             }
         }
         public static ulong[] DivOfPolyGF(ulong divisible, ulong divisor)
         {
-            if (ConvertToString2(divisible).Length < ConvertToString2(divisor).Length) { return new ulong[2] { 0, divisible }; }
-            if (divisor == 0) { throw new Exception("Деление на 0"); }
-            if (divisor == 1) { return new ulong[2] { divisible, 0 }; }
+            if (ConvertToString2(divisible).Length < ConvertToString2(divisor).Length)
+            {
+                return new ulong[2] { 0, divisible };
+            }
+            if (divisor == 0)
+            {
+                throw new Exception("Деление на 0");
+            }
+            if (divisor == 1)
+            {
+                return new ulong[2] { divisible, 0 };
+            }
             string strDivisible = ConvertToString2(divisible);
             string strDivisor = ConvertToString2(divisor);
 
@@ -108,13 +151,21 @@
                 {
                     if (counter < divisibleLenght)
                     {
-                        remainder += strDivisible[counter]; counter++;
+                        remainder += strDivisible[counter];
+                        counter++;
                         remainder = Convert.ToString((long)Convert.ToUInt64(remainder, 2), 2);
-                        if (remainder.Length != strDivisor.Length) { quotient += "0"; }
+                        if (remainder.Length != strDivisor.Length)
+                        {
+                            quotient += "0";
+                        }
                     }
                     else
                     {
-                        return new ulong[2] { (ulong)Convert.ToUInt64(quotient, 2), (ulong)Convert.ToUInt64(remainder, 2) };
+                        return new ulong[2]
+                        {
+                            (ulong)Convert.ToUInt64(quotient, 2),
+                            (ulong)Convert.ToUInt64(remainder, 2)
+                        };
                     }
                 }
             }
@@ -130,38 +181,66 @@
         public static int MultOfPolyGF(int poly1, int poly2, int modPoly)
         {
             int result = 0;
-            if (poly1 < poly2) { int cup = poly1; poly1 = poly2; poly2 = cup; }
+            if (poly1 < poly2)
+            {
+                int item = poly1;
+                poly1 = poly2;
+                poly2 = item;
+            }
 
             while (true)
             {
-                if (poly2 == 0) { break; }
+                if (poly2 == 0)
+                {
+                    break;
+                }
                 int currentBit = poly2 & 0x01;
-                if (currentBit == 1) { result ^= poly1; }
-                poly1 <<= 1; poly2 >>= 1;
+                if (currentBit == 1)
+                {
+                    result ^= poly1;
+                }
+                poly1 <<= 1;
+                poly2 >>= 1;
             }
             return DivOfPolyGF(result, modPoly)[1];
         }
         public static long MultOfPolyGF(long poly1, long poly2, long modPoly)
         {
             long result = 0;
-            if (poly1 < poly2) { long cup = poly1; poly1 = poly2; poly2 = cup; }
-
+            if (poly1 < poly2)
+            {
+                long item = poly1;
+                poly1 = poly2;
+                poly2 = item;
+            }
             while (poly2 != 0)
             {
-                if ((poly2 & 0x01) == 1) { result ^= poly1; }
-                poly1 <<= 1; poly2 >>= 1;
+                if ((poly2 & 0x01) == 1)
+                {
+                    result ^= poly1;
+                }
+                poly1 <<= 1;
+                poly2 >>= 1;
             }
             return DivOfPolyGF(result, modPoly)[1];
         }
         public static ulong MultOfPolyGF(ulong poly1, ulong poly2, ulong modPoly)
         {
             ulong result = 0;
-            if (poly1 < poly2) { ulong cup = poly1; poly1 = poly2; poly2 = cup; }
-
+            if (poly1 < poly2)
+            {
+                ulong item = poly1;
+                poly1 = poly2;
+                poly2 = item;
+            }
             while (poly2 != 0)
             {
-                if ((poly2 & 0x01) == 1) { result ^= poly1; }
-                poly1 <<= 1; poly2 >>= 1;
+                if ((poly2 & 0x01) == 1)
+                {
+                    result ^= poly1;
+                }
+                poly1 <<= 1;
+                poly2 >>= 1;
             }
             return DivOfPolyGF(result, modPoly)[1];
         }
@@ -174,8 +253,14 @@
         /// <returns>мульти-инверсия полинома</returns>
         public static int InversionPolynomialGF(int poly, int modPoly)
         {
-            if (poly == 0) { return 0; }
-            if (poly == 1) { return 1; }
+            if (poly == 0)
+            {
+                return 0;
+            }
+            if (poly == 1)
+            {
+                return 1;
+            }
             int divisible = modPoly;
             int divisor = poly;
             int remainderD = 0;
@@ -195,13 +280,19 @@
                 if (counter == 1)
                 {
                     remainderD = quotient;
-                    if (remainder == 1) { return remainderD; }
+                    if (remainder == 1)
+                    {
+                        return remainderD;
+                    }
                     continue;
                 }
                 if (counter == 2)
                 {
                     remainderB = 1 ^ MultOfPolyGF(remainderD, quotient, modPoly);
-                    if (remainder == 1) { return remainderB; }
+                    if (remainder == 1)
+                    {
+                        return remainderB;
+                    }
                     continue;
                 }
 
@@ -209,13 +300,22 @@
                 remainderB = remainderD ^ MultOfPolyGF(quotient, remainderB, modPoly);
                 remainderD = cup;
 
-                if (remainder == 1 || remainder == 0) { return remainderB; }
+                if (remainder == 1 || remainder == 0)
+                {
+                    return remainderB;
+                }
             }
         }
         public static long InversionPolynomialGF(long poly, long modPoly)
         {
-            if (poly == 0) { return 0; }
-            if (poly == 1) { return 1; }
+            if (poly == 0)
+            {
+                return 0;
+            }
+            if (poly == 1)
+            {
+                return 1;
+            }
             long divisible = modPoly;
             long divisor = poly;
             long remainderD = 0;
@@ -235,13 +335,19 @@
                 if (counter == 1)
                 {
                     remainderD = quotient;
-                    if (remainder == 1) { return remainderD; }
+                    if (remainder == 1)
+                    {
+                        return remainderD;
+                    }
                     continue;
                 }
                 if (counter == 2)
                 {
                     remainderB = 1 ^ MultOfPolyGF(remainderD, quotient, modPoly);
-                    if (remainder == 1) { return remainderB; }
+                    if (remainder == 1)
+                    {
+                        return remainderB;
+                    }
                     continue;
                 }
 
@@ -249,13 +355,22 @@
                 remainderB = remainderD ^ MultOfPolyGF(quotient, remainderB, modPoly);
                 remainderD = cup;
 
-                if (remainder == 1 || remainder == 0) { return remainderB; }
+                if (remainder == 1 || remainder == 0)
+                {
+                    return remainderB;
+                }
             }
         }
         public static ulong InversionPolynomialGF(ulong poly, ulong modPoly)
         {
-            if (poly == 0) { return 0; }
-            if (poly == 1) { return 1; }
+            if (poly == 0)
+            {
+                return 0;
+            }
+            if (poly == 1)
+            {
+                return 1;
+            }
             ulong divisible = modPoly;
             ulong divisor = poly;
             ulong remainderD = 0;
@@ -275,13 +390,19 @@
                 if (counter == 1)
                 {
                     remainderD = quotient;
-                    if (remainder == 1) { return remainderD; }
+                    if (remainder == 1)
+                    {
+                        return remainderD;
+                    }
                     continue;
                 }
                 if (counter == 2)
                 {
                     remainderB = 1 ^ MultOfPolyGF(remainderD, quotient, modPoly);
-                    if (remainder == 1) { return remainderB; }
+                    if (remainder == 1)
+                    {
+                        return remainderB;
+                    }
                     continue;
                 }
 
@@ -289,7 +410,10 @@
                 remainderB = remainderD ^ MultOfPolyGF(quotient, remainderB, modPoly);
                 remainderD = cup;
 
-                if (remainder == 1 || remainder == 0) { return remainderB; }
+                if (remainder == 1 || remainder == 0)
+                {
+                    return remainderB;
+                }
             }
         }
 
@@ -303,7 +427,10 @@
         /// <exception cref="Exception"></exception>
         public static int[,] MultOfMatrixGF(int[,] matrix1, int[,] matrix2, int modPoly)
         {
-            if (matrix1.GetLength(1) != matrix2.GetLength(0)) { throw new Exception("Ошибочные параметры"); }
+            if (matrix1.GetLength(1) != matrix2.GetLength(0))
+            {
+                throw new Exception("Ошибочные параметры");
+            }
             int[,] result = new int[matrix1.GetLength(0), matrix2.GetLength(1)];
 
             for (int i = 0; i < matrix1.GetLength(0); i++)          // пройтись по всем строкам
@@ -339,7 +466,9 @@
         {
             if (matrix1.GetLength(0) != matrix2.GetLength(0) ||
                 matrix1.GetLength(1) != matrix2.GetLength(1))
-            { throw new Exception("Ошибочные параметры"); }
+            {
+                throw new Exception("Ошибочные параметры");
+            }
 
             int[,] result = new int[matrix1.GetLength(0), matrix1.GetLength(1)];
 
