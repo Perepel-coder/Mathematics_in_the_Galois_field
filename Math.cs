@@ -57,5 +57,31 @@
             }
             return true;
         }
+
+        public static int GetMutuallySimple(int fn)
+        {
+            Random random = new();
+            while (true)
+            {
+                int e = NextSimple(random, 2, fn - 1);
+                if (Mathematics.Math.NOD(e, fn) == 1)
+                {
+                    return e;
+                }
+            }
+        }
+        public static int NextSimple(Random random, int min, int max)
+        {
+            int num;
+            while (true)
+            {
+                num = random.Next(min, max);
+                if (Mathematics.Math.IsSimple(num))
+                {
+                    break;
+                }
+            }
+            return num;
+        }
     }
 }

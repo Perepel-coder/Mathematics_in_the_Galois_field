@@ -34,36 +34,36 @@
             {
                 return new int[2] { divisible, 0 };
             }
-            string strDivisible = Convert.ToString(divisible, 2);
-            string strDivisor = Convert.ToString(divisor, 2);
+            string divisibleBits = Convert.ToString(divisible, 2);
+            string divisorBits = Convert.ToString(divisor, 2);
 
-            string quotient = string.Empty;
-            string remainder = strDivisible.Substring(0, strDivisor.Length);
+            string intDiv = string.Empty;
+            string remainder = divisibleBits.Substring(0, divisorBits.Length);
 
-            int counter = strDivisor.Length;
-            int divisibleLenght = strDivisible.Length;
+            int counter = divisorBits.Length;
+            int divisibLenght = divisibleBits.Length;
 
             while (true)
             {
-                remainder = Convert.ToString(Convert.ToInt32(remainder, 2) ^ Convert.ToInt32(strDivisor, 2), 2);
-                quotient += "1";
-                while (remainder.Length != strDivisor.Length)
+                remainder = Convert.ToString(Convert.ToInt32(remainder, 2) 
+                    ^ Convert.ToInt32(divisorBits, 2), 2);
+                intDiv += "1";
+                while (remainder.Length != divisorBits.Length)
                 {
-                    if (counter < divisibleLenght)
+                    if (counter < divisibLenght)
                     {
-                        remainder += strDivisible[counter];
+                        remainder += divisibleBits[counter];
                         counter++;
-                        remainder = Convert.ToString(Convert.ToInt32(remainder, 2), 2);
-                        if (remainder.Length != strDivisor.Length)
+                        if (remainder.Length != divisorBits.Length)
                         {
-                            quotient += "0";
+                            intDiv += "0";
                         }
                     }
                     else
                     {
                         return new int[2]
                         {
-                            Convert.ToInt32(quotient, 2),
+                            Convert.ToInt32(intDiv, 2),
                             Convert.ToInt32(remainder, 2)
                         };
                     }
@@ -243,6 +243,11 @@
                 poly2 >>= 1;
             }
             return DivOfPolyGF(result, modPoly)[1];
+        }
+
+        public static int XorPolyGF(int poly1, int poly2)
+        {
+            return poly1 ^ poly2;
         }
 
         /// <summary>
@@ -503,7 +508,7 @@
         /// </summary>
         /// <param name="matrix"></param>
         /// <returns></returns>
-        public static int CreatPolyFromBITMatrix(int[,] matrix)
+        public static int CreatPolyFromMatrix(int[,] matrix)
         {
             string result = "";
             for (int i = 0; i < matrix.GetLength(0); i++)
